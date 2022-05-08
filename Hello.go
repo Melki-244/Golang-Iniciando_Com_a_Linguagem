@@ -1,16 +1,15 @@
 package main
 
-import "fmt"
-import "os"
-import "net/http"
-import "reflect"
+import (
+  "fmt"
+  "os"
+  "net/http"
+)
 
 func main()  {
-  arrayPadrao()
-  arraySlice()
-   //introducao()   
+  introducao()   
   for {
-    //exibeMenu() 
+    exibeMenu() 
     comando := leComando()
 
     switch comando {
@@ -47,7 +46,11 @@ func leComando() int {
 }
 func iniciarMonitoramento()  {
   fmt.Println("Monitorando...")  
-
+  
+  sites := [] string {"https://alura.com.br", "https://caelum.com.br", "https://amazon.com"}
+  for position, content := range sites {
+   fmt.Println("Passando A Posição", position,"e o Conteudo", content,"Do Slice") 
+  }
   site := "https://alura.com.br" 
   resp, _ := http.Get(site)
   
@@ -56,27 +59,4 @@ func iniciarMonitoramento()  {
   }else{
     fmt.Println("Site", site, "Não Foi Carregado Com Sucesso. Status Code:",resp.StatusCode)
   }
-}
-func arraySlice()  {
-  nomes := []string {"Melki","Kátia","Kaline","Maria"} 
-  fmt.Println("nomes no Slice", nomes)
-  fmt.Println(reflect.TypeOf(nomes))
-  fmt.Println("O Meu Slice Tem", len(nomes))
-  fmt.Println("A Capacidade Do Slice é de", cap(nomes))
-
-  nomes = append(nomes, "Aparecida")
-
-  fmt.Println("nomes no Slice", nomes)
-  fmt.Println(reflect.TypeOf(nomes))
-  fmt.Println("O Meu Slice Tem", len(nomes))
-  fmt.Println("A Capacidade Do Slice é de", cap(nomes))
-}
-func arrayPadrao()  {
-  var sites [4] string
-  sites[0] = "https://caelum.com.br" 
-  sites[1] = "https://mercadolivre.com.br"
-  sites[2] = "https://amazon.com.br"
-
-  fmt.Println("Sites No Array", sites)
-  fmt.Println(reflect.TypeOf(sites)) 
 }
