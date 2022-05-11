@@ -3,8 +3,10 @@ package main
 import (
 	"bufio"
 	"fmt"
+	"io"
 	"net/http"
 	"os"
+	"strings"
 	"time"
 )
 
@@ -56,11 +58,12 @@ func leComando() int {
 func iniciarMonitoramento()  {
   fmt.Println("Monitorando...")  
   
-  site := leSitesDoArquivo()
-  for atual:= 0; atual < testesMonitoramento; atual++ {
-    for i, site := range site {
-      fmt.Println("Site:", i ,":", site)
-      testeSite(site)
+  sites := leSitesDoArquivo()
+
+  for i:= 0; i < testesMonitoramento; i++ {
+    for i, site := range sites {
+      fmt.Println("Site:", i, ":", site)
+      testaSite(site)
     }
     seconds := time.Second
     time.Sleep(delayMonitoramento * seconds)
@@ -70,16 +73,16 @@ func iniciarMonitoramento()  {
   fmt.Println("")
 
 }
-func testeSite(site string)  {
+func testaSite(site string)  {
   resp, err := http.Get(site)
  
   if err != nil {
-    fmt.Println("Ocorreu Um Erro", err) 
+    fmt.Println("Ocorreu Um Erro:", err) 
   }
   if resp.StatusCode == 200 {
     fmt.Println("Site", site, "Carregado Com Sucesso!") 
   }else{
-    fmt.Println("Site", site, "Não Foi Carregado Com Sucesso. Status Code:",resp.StatusCode)
+    fmt.Println("Site", site, "Não Foi Carregado Com Sucesso. Status Code:", resp.StatusCode)
   }
 }
 func leSitesDoArquivo() []string {
@@ -87,20 +90,26 @@ func leSitesDoArquivo() []string {
 
   //arquivoOs, err := os.Open("sites.txt")  
   //arquivo, err := ioutil.ReadFile("sites.txt")  
-  arquivo, err:= os.Open("sites.txt")
-  fmt.Println(arquivo)
+  arquivo, err := os.Open("sites.txt")
 
   if err != nil {
     fmt.Println("Ocorreu Um Erro:", err)
   }
 
-  leitor :=  bufio.NewReader(arquivo)  
-  linha, err := leitor.ReadString('\n')
+  leitor := bufio.NewReader(arquivo)  
 
-  fmt.Printf(linha)
-  
-  if err != nil {
-  fmt.Println("Ocorreu Um Erro:", err)
+  for {
+    linha, err := leitor.ReadString('\n')
+    linha = strings.TrimSpace(linha) 
+
+    sites = append(sites, linha)    
+
+    if err == io.EOF {
+      break 
+    }
   }
+
+  arquivo.Close()
+
   return sites
 }
