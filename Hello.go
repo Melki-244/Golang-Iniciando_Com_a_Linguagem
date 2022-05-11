@@ -84,8 +84,12 @@ func testeSite(site string)  {
 func leSitesDoArquivo() []string {
   var sites []string 
 
-  arquivo, _ := os.Open("sites.txt")  
+  arquivo, err := os.Open("sites.txt")  
   fmt.Println(arquivo)
+
+  if err != nil {
+    fmt.Println("Ocorreu Um Erro:", err)
+  }
 
   return sites
 }
