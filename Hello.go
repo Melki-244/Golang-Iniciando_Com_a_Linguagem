@@ -55,10 +55,10 @@ func leComando() int {
 func iniciarMonitoramento()  {
   fmt.Println("Monitorando...")  
   
-  sites := [] string {"https://alura.com.br", "https://caelum.com.br", "https://amazon.com"}
+  site := leSitesDoArquivo()
   for atual:= 0; atual < testesMonitoramento; atual++ {
-    for positionSite, site := range sites {
-      fmt.Println("Site:", positionSite,":", site)
+    for i, site := range site {
+      fmt.Println("Site:", i ,":", site)
       testeSite(site)
     }
     seconds := time.Second
@@ -70,11 +70,22 @@ func iniciarMonitoramento()  {
 
 }
 func testeSite(site string)  {
-  resp, _ := http.Get(site)
-  
+  resp, err := http.Get(site)
+ 
+  if err != nil {
+    fmt.Println("Ocorreu Um Erro", err) 
+  }
   if resp.StatusCode == 200 {
     fmt.Println("Site", site, "Carregado Com Sucesso!") 
   }else{
     fmt.Println("Site", site, "Não Foi Carregado Com Sucesso. Status Code:",resp.StatusCode)
   }
+}
+func leSitesDoArquivo() []string {
+  var sites []string 
+
+  arquivo, _ := os.Open("sites.txt")  
+  fmt.Println(arquivo)
+
+  return sites
 }
