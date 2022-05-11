@@ -1,10 +1,11 @@
 package main
 
 import (
-  "fmt"
-  "os"
-  "net/http"
-  "time"
+	"bufio"
+	"fmt"
+	"net/http"
+	"os"
+	"time"
 )
 
 const delayMonitoramento = 5
@@ -84,12 +85,22 @@ func testeSite(site string)  {
 func leSitesDoArquivo() []string {
   var sites []string 
 
-  arquivo, err := os.Open("sites.txt")  
+  //arquivoOs, err := os.Open("sites.txt")  
+  //arquivo, err := ioutil.ReadFile("sites.txt")  
+  arquivo, err:= os.Open("sites.txt")
   fmt.Println(arquivo)
 
   if err != nil {
     fmt.Println("Ocorreu Um Erro:", err)
   }
 
+  leitor :=  bufio.NewReader(arquivo)  
+  linha, err := leitor.ReadString('\n')
+
+  fmt.Printf(linha)
+  
+  if err != nil {
+  fmt.Println("Ocorreu Um Erro:", err)
+  }
   return sites
 }
