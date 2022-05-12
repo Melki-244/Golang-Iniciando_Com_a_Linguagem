@@ -4,11 +4,12 @@ import (
 	"bufio"
 	"fmt"
 	"io"
+	"io/ioutil"
 	"net/http"
 	"os"
+	"strconv"
 	"strings"
 	"time"
-  "strconv"
 )
 
 const delayMonitoramento = 5
@@ -25,6 +26,7 @@ func main()  {
        iniciarMonitoramento()
       case 2:
        fmt.Println("Exibindo Logs")   
+       imprimeLogs()
       case 0:
        fmt.Println("Saindo do Programa") 
        os.Exit(0) 
@@ -131,4 +133,13 @@ func registraLog(site string, status bool)  {
   }
 
   arquivo.WriteString(time.Now().Format("02/01/2006 15:04:05 - ") + site + statusString + strconv.FormatBool(status) + "\n")
+}
+func imprimeLogs()  {
+  arquivo, err := ioutil.ReadFile("logs.txt") 
+
+  if err != nil {
+    fmt.Println("Ocorreu Um Erro", err)
+  }
+  
+  fmt.Println(string(arquivo))
 }
