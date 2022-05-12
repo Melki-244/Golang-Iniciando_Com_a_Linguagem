@@ -8,6 +8,7 @@ import (
 	"os"
 	"strings"
 	"time"
+  "strconv"
 )
 
 const delayMonitoramento = 5
@@ -118,15 +119,16 @@ func registraLog(site string, status bool)  {
   var statusString string
   switch status{
   case false:
-    statusString = "Offline" 
+    statusString = " Offline " 
   case true:
-    statusString = "Online"
+    statusString = " Online "
   }
-  fmt.Println(statusString)
   
   arquivo, err := os.OpenFile("logs.txt", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
-  fmt.Println(arquivo) 
+
   if err != nil {
     fmt.Println("Ocorreu Um Erro Ao Abrir O Arquivo: ", err) 
   }
+
+  arquivo.WriteString(site + statusString + strconv.FormatBool(status) + "\n")
 }
