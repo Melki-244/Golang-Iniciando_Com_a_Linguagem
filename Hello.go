@@ -81,6 +81,7 @@ func testaSite(site string)  {
   }
   if resp.StatusCode == 200 {
     fmt.Println("Site", site, "Carregado Com Sucesso!") 
+    registraLog(site, true)
   }else{
     fmt.Println("Site", site, "Não Foi Carregado Com Sucesso. Status Code:", resp.StatusCode)
   }
@@ -112,4 +113,20 @@ func leSitesDoArquivo() []string {
   arquivo.Close()
 
   return sites
+}
+func registraLog(site string, status bool)  {
+  var statusString string
+  switch status{
+  case false:
+    statusString = "Offline" 
+  case true:
+    statusString = "Online"
+  }
+  fmt.Println(statusString)
+  
+  arquivo, err := os.OpenFile("logs.txt", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
+  fmt.Println(arquivo) 
+  if err != nil {
+    fmt.Println("Ocorreu Um Erro Ao Abrir O Arquivo: ", err) 
+  }
 }
